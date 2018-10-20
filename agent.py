@@ -37,7 +37,11 @@ class Agent:
         self.mem.append((state, action, reward, next_state, terminal))
 
     def replay(self, batch_size):
-        batch = random.sample(self.mem, batch_size)
+        
+        if len(self.mem) < batch_size:
+            batch = self.mem
+        else:
+            batch = random.sample(self.mem, batch_size)
         
         for state, action, reward, next_state, terminal in batch:
             target = reward
@@ -48,7 +52,7 @@ class Agent:
             target_f = self.model.predict(state)
             target_f[0][action] = target
             
-            self.model.fit(state, target_f, epoch=1)
+            self.model.fit(state, target_f, epochs=1)
         
         if self.eps > self.eps_min:
             self.eps *= self.eps_decay

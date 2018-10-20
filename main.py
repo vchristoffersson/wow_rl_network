@@ -10,7 +10,8 @@ action_size = 4
 agent = Agent(
             state_size = state_size, 
             action_size = action_size, 
-            discount = 0.9, eps = 1.0, 
+            discount = 0.9, 
+            eps = 1.0, 
             eps_decay = 0.995, 
             eps_min = 0.01, 
             l_rate = 0.001
