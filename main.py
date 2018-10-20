@@ -4,7 +4,7 @@ from agent import Agent
 #get state_size and action_size from env?
 env = Env()
 
-state_size = None
+state_size = 2
 action_size = 4
 
 agent = Agent(
@@ -27,17 +27,13 @@ for ep in range(episodes):
         action = agent.action(state)
 
         #health percentage not needed?
-        ret = env.step(action).contents
-        next_state = ret[0]
-        health = ret[1]
-        reward = ret[2]
-        terminal = ret[3]
-
-        agent.remember(state, action, reward, next_state, terminal)
+        next_state, reward, done = env.step(action)
+        
+        agent.remember(state, action, reward, next_state, done)
 
         state = next_state
 
-        if terminal:
+        if done:
             print("episode {}/{} done, after {} steps".format(ep, episodes, steps))
             break
 

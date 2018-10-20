@@ -38,13 +38,18 @@ class Agent:
 
     def replay(self, batch_size):
         batch = random.sample(self.mem, batch_size)
+        
         for state, action, reward, next_state, terminal in batch:
             target = reward
+
             if not terminal:
                 target += self.discount * np.amax(self.model.predict(next_state)[0])
+            
             target_f = self.model.predict(state)
             target_f[0][action] = target
+            
             self.model.fit(state, target_f, epoch=1)
+        
         if self.eps > self.eps_min:
             self.eps *= self.eps_decay
 
