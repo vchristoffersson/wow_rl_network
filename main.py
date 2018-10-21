@@ -25,9 +25,8 @@ for ep in range(episodes):
     state = env.reset()
 
     for steps in range(500):
-        action = agent.action(state)
+        action = int(agent.action(state))
 
-        #health percentage not needed?
         next_state, reward, done = env.step(action)
         
         agent.remember(state, action, reward, next_state, done)
