@@ -37,4 +37,4 @@ for ep in range(episodes):
             print("episode {}/{} done, after {} steps".format(ep, episodes, steps))
             break
 
-    agent.replay(32)
+    agent.replay(50)
