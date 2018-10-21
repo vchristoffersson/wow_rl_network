@@ -16,7 +16,7 @@ class Env(object):
 
         st = lib.Reset(self.obj)
         state = np.reshape([st, 1.0], [1, 2])
-        time.sleep(0.5)
+        time.sleep(0.2)
 
         return state
 
@@ -25,7 +25,7 @@ class Env(object):
         lib.Step.argtypes = [c_int]
         lib.Step.restype = POINTER(c_float * 4)
 
-         # values: 0 -> state, 1-> %health, 2-> reward, 3-> is_done
+         # values: 0 -> state_val, 1-> state_%health, 2-> reward, 3-> is_done
         values = lib.Step(self.obj, action).contents
 
         st = int(values[0])
@@ -46,7 +46,8 @@ def test_env():
 
         next_state, reward, done = env.step(action)
         
-        print("next state: {}".format(next_state))
+        print("next state square: {}".format(next_state[0, 0]))
+        print("next state health: {}".format(next_state[0, 1]))
         print("reward: {}".format(reward))
         print("done: {}".format(done))
 
