@@ -2,6 +2,7 @@ from keras.models import Sequential, load_model
 from keras.optimizers import Adam
 from keras.layers import Dense
 from keras.callbacks import TensorBoard, EarlyStopping
+from keras.initializers import RandomUniform
 
 from collections import deque
 import numpy as np 
@@ -32,9 +33,10 @@ class Agent:
 
     def init_model(self):
         model = Sequential()
-        model.add(Dense(128, input_dim=self.state_size, activation='relu'))
-        model.add(Dense(128, activation='relu'))
-        model.add(Dense(self.action_size, activation='linear'))
+        model.add(Dense(100, kernel_initializer='VarianceScaling', input_dim=self.state_size, activation='relu'))
+        model.add(Dense(60, kernel_initializer='VarianceScaling', activation='relu'))
+        Q_initializer = RandomUniform(minval=-1e-6, maxval=1e-6, seed=None)
+        model.add(Dense(self.action_size, kernel_initializer=Q_initializer))
         model.compile(loss='mse', optimizer=Adam(lr=self.l_rate))
 
         return model

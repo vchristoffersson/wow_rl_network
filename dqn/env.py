@@ -3,7 +3,7 @@ from random import randint
 import numpy as np
 import time
 
-lib = cdll.LoadLibrary('libenv.so')
+lib = cdll.LoadLibrary('../libenv.so')
 
 class Env(object):
     def __init__(self):
@@ -17,8 +17,14 @@ class Env(object):
 
     def reset(self):
 
-        st = lib.Reset(self.obj)
-        state = np.reshape([st, 1.0], [1, 2])
+        lib.Reset.restype = POINTER(c_float * 3)
+        values = lib.Reset(self.obj).contents
+
+        st = int(values[0])
+        hp = values[1]
+        dist = values[2]
+
+        state = np.reshape([st, hp, dist], [1, 3])
         time.sleep(0.2)
 
         return state

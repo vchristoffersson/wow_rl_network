@@ -12,7 +12,7 @@ agent = Agent(
             action_size = action_size, 
             discount = 0.9, 
             eps = 1.0, 
-            eps_decay = 0.001, 
+            eps_decay = 0.99, 
             eps_min = 0.01, 
             l_rate = 0.0001
             )
