@@ -2,15 +2,15 @@ from keras.layers import Dense, Input
 from keras.optimizers import RMSprop
 from keras import backend as K
 from keras.initializers import RandomUniform
-from keras.models import Model, load_model
+from keras.models import Model
 import numpy as np
 from collections import deque
 from keras.utils.np_utils import to_categorical
 
 from pathlib import Path
 
-path_on = "model_on.h5"
-path_off = "model_off.h5"
+path_on = "weights_on.h5"
+path_off = "weights_off.h5"
 
 class ExperienceReplay:
 
@@ -57,26 +57,20 @@ class DoubleQLearningModel(object):
         self._state_dim = state_dim
         self._action_dim = action_dim
         # define the two deep Q-networks
-        self._online_model = self.__load_model_on()
-        self._offline_model = self.__load_model_off()
+        self._online_model = self.__load_model(path_on)
+        self._offline_model = self.__load_model(path_off)
         # define ops for updating the networks
         self._update = self.__mse() 
 
-    def __load_model_off(self):
-        saved_file = Path(path_off)
+    def __load_model(self, path):
+        saved_file = Path(path)
+
+        model = self.__build_model() 
 
         if saved_file.is_file():
-            return load_model(path_off)
-        else:
-            return self.__build_model()
+            model.load_weights(path)
 
-    def __load_model_on(self):
-            saved_file = Path(path_on)
-
-            if saved_file.is_file():
-                return load_model(path_on)
-            else:
-                return self.__build_model()
+        return model
 
     def __build_model(self):
         '''
@@ -139,8 +133,7 @@ class DoubleQLearningModel(object):
         if np.random.uniform() > .5:
             self.__switch_weights()
 
-        self._online_model.save(path_on)
-        self._offline_model.save(path_off)
+        
 
 
     def __switch_weights(self):
@@ -151,3 +144,7 @@ class DoubleQLearningModel(object):
         online_params = self._online_model.get_weights()
         self._online_model.set_weights(offline_params)
         self._offline_model.set_weights(online_params)
+
+    def save_weights(self):
+        self._online_model.save_weights(path_on)
+        self._offline_model.save_weights(path_off)

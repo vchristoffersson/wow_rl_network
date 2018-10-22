@@ -96,7 +96,7 @@ def train_loop_ddqn(model, env, num_episodes, batch_size=64, gamma=.94):
         R_avg.append(.05 * R_buffer[i] + .95 * R_avg[i-1]) if i > 0 else R_avg.append(R_buffer[i])
         print('Episode: ', i, 'Reward:', ep_reward, 'Epsilon', eps, 'mean q', np.mean(np.array(q_buffer)))
         
-
+        model.save_weights()
 
         # if running average > 195, the task is considerd solved
         if R_avg[-1] > 195:
