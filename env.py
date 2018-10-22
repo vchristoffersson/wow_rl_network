@@ -9,8 +9,11 @@ class Env(object):
     def __init__(self):
         self.obj = lib.Env_new()
     
-    def getint(self):
-        return lib.GetInt(self.obj)
+    def get_state_size(self):
+        return lib.GetStateSize(self.obj)
+
+    def get_action_size(self):
+        return lib.GetActionSize(self.obj)
 
     def reset(self):
 

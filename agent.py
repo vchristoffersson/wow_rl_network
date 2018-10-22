@@ -1,6 +1,8 @@
 from keras.models import Sequential, load_model
 from keras.optimizers import Adam
 from keras.layers import Dense
+from keras.callbacks import TensorBoard, EarlyStopping
+
 from collections import deque
 import numpy as np 
 import random
@@ -30,17 +32,20 @@ class Agent:
 
     def init_model(self):
         model = Sequential()
-        model.add(Dense(24, input_dim=self.state_size, activation='relu'))
-        model.add(Dense(24, activation='relu'))
+        model.add(Dense(128, input_dim=self.state_size, activation='relu'))
+        model.add(Dense(128, activation='relu'))
         model.add(Dense(self.action_size, activation='linear'))
         model.compile(loss='mse', optimizer=Adam(lr=self.l_rate))
 
         return model
 
     def action(self, state):
+
         if np.random.rand() <= self.eps:
             return random.randrange(self.action_size)   
+        
         actions = self.model.predict(state)
+        
         return np.argmax(actions[0])
 
     def remember(self, state, action, reward, next_state, terminal):
@@ -62,6 +67,9 @@ class Agent:
             target_f = self.model.predict(state)
             target_f[0][action] = target
             
+            #estop = EarlyStopping(monitor='val_acc', patience=10)
+            #callbacks=[estop]
+
             self.model.fit(state, target_f, epochs=1)
         
         self.model.save(path)
