@@ -14,7 +14,7 @@ off_path = "off_model.h5"
 
 UPDATE_FREQUENCY = 50
 
-Class Agent():
+class Agent:
 
     def __init__(self, state_size, action_size, discount, eps, eps_decay, eps_min, l_rate):
         self.state_size = state_size       
@@ -26,9 +26,9 @@ Class Agent():
         self.eps_min = eps_min
         self.l_rate = l_rate
         self.on_model = self.load_model(on_path)
-        self.off_model = slef.load_model(off_path)
+        self.off_model = self.load_model(off_path)
 
-    def __load_model(self, path):
+    def load_model(self, path):
         saved_file = Path(path)
 
         if saved_file.is_file():
@@ -36,7 +36,7 @@ Class Agent():
         else:
             return self.init_model()
 
-    def __init_model(self):
+    def init_model(self):
         model = Sequential()
         model.add(Dense(100, kernel_initializer='VarianceScaling', input_dim=self.state_size, activation='relu'))
         model.add(Dense(60, kernel_initializer='VarianceScaling', activation='relu'))
@@ -77,10 +77,11 @@ Class Agent():
 
             self.on_model.fit(state, target_f, epochs=1, verbose=0)
         
-        self.model.save(path)
+        self.on_model.save(on_path)
+        self.off_model.save(off_path)
 
         if self.eps > self.eps_min:
             self.eps *= self.eps_decay
 
-    def reset_target()
+    def reset_target():
         self.off_model.set_weights(self.on_model.get_weights())

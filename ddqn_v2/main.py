@@ -27,9 +27,9 @@ for ep in range(episodes):
     state = env.reset()
 
     for step in range(steps):
-        action = int(agent.action(state))
+        action = int(agent.action(state, ep))
 
-        next_state, reward, done = env.step(action, ep)   
+        next_state, reward, done = env.step(action)   
         
         agent.remember(state, action, reward, next_state, done)
 
