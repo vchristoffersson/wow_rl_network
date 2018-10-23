@@ -83,5 +83,5 @@ class Agent:
         if self.eps > self.eps_min:
             self.eps *= self.eps_decay
 
-    def reset_target():
+    def reset_target(self):
         self.off_model.set_weights(self.on_model.get_weights())
