@@ -33,10 +33,12 @@ class Agent:
 
     def init_model(self):
         model = Sequential()
-        model.add(Dense(100, kernel_initializer='VarianceScaling', input_dim=self.state_size, activation='relu'))
-        model.add(Dense(60, kernel_initializer='VarianceScaling', activation='relu'))
-        Q_initializer = RandomUniform(minval=-1e-6, maxval=1e-6, seed=None)
-        model.add(Dense(self.action_size, kernel_initializer=Q_initializer))
+        model.add(Dense(24, input_dim=self.state_size, activation='relu'))
+        model.add(Dense(24, activation='relu'))
+        model.add(Dense(self.action_size, activation='linear'))
+        #Q_initializer = RandomUniform(minval=-1e-6, maxval=1e-6, seed=None)
+        #model.add(Dense(self.action_size, kernel_initializer=Q_initializer))
+        
         model.compile(loss='mse', optimizer=Adam(lr=self.l_rate))
 
         return model
@@ -72,7 +74,7 @@ class Agent:
             #estop = EarlyStopping(monitor='val_acc', patience=10)
             #callbacks=[estop]
 
-            self.model.fit(state, target_f, epochs=1)
+            self.model.fit(state, target_f, epochs=1, verbose=0)
         
         self.model.save(path)
 
