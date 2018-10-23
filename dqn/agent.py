@@ -9,10 +9,9 @@ import numpy as np
 import random
 from pathlib import Path
 
-path = "my_model.h5"
-
 class Agent:
     def __init__(self, state_size, action_size, discount, eps, eps_decay, eps_min, l_rate):
+        self.path = "my_model.h5"
         self.state_size = state_size       
         self.action_size = action_size
         self.mem = deque(maxlen=2000)
@@ -24,18 +23,25 @@ class Agent:
         self.model = self.load_model()
 
     def load_model(self):
-        saved_file = Path(path)
+        saved_file = Path(self.path)
+
+        model = self.init_model()
 
         if saved_file.is_file():
-            return load_model(path)
-        else:
-            return self.init_model()
+            model.load_weights(self.path)
+            self.eps = self.eps_min
+
+        return model 
+
+    def save_model(self):
+        self.model.save(self.path)
 
     def init_model(self):
         model = Sequential()
         model.add(Dense(24, input_dim=self.state_size, activation='relu'))
         model.add(Dense(24, activation='relu'))
         model.add(Dense(self.action_size, activation='linear'))
+        
         #Q_initializer = RandomUniform(minval=-1e-6, maxval=1e-6, seed=None)
         #model.add(Dense(self.action_size, kernel_initializer=Q_initializer))
         
@@ -76,8 +82,6 @@ class Agent:
 
             self.model.fit(state, target_f, epochs=1, verbose=0)
         
-        self.model.save(path)
-
         if self.eps > self.eps_min:
             self.eps *= self.eps_decay
 
