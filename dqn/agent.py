@@ -21,6 +21,7 @@ class Agent:
         self.eps_min = eps_min
         self.l_rate = l_rate
         self.model = self.load_model()
+        self.model.compile(loss='mse', optimizer=Adam(lr=self.l_rate))
 
     def load_model(self):
         saved_file = Path(self.path)
@@ -28,7 +29,7 @@ class Agent:
         model = self.init_model()
 
         if saved_file.is_file():
-            model.load_weights(self.path)
+            model = load_model(self.path)
             self.eps = self.eps_min
 
         return model 

@@ -18,14 +18,16 @@ agent = Agent(
             )
 
 #Train agent
-episodes = 1000
-steps = 300
+episodes = 10000
+steps = 200
 
 for ep in range(episodes):
     state = env.reset()
 
     for step in range(steps):
         action = int(agent.action(state))
+
+        #print("action: {}".format(action))
 
         next_state, reward, done = env.step(action)
         
