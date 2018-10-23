@@ -47,7 +47,7 @@ class Agent:
         return model
 
     def action(self, state, step):
-        if step % UPDATE_FREQUENCY == 0: reset_target()
+        if step % UPDATE_FREQUENCY == 0: self.reset_target()
 
         if np.random.rand() <= self.eps:
             return random.randrange(self.action_size)   
