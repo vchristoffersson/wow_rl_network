@@ -29,18 +29,21 @@ class Agent:
 
         if saved_file.is_file():
             model = load_model(self.path)
-            model.compile(loss='mse', optimizer=Adam(lr=self.l_rate))
+            #model.compile(loss='mse', optimizer=Adam(lr=self.l_rate))
             self.eps = self.eps_min
 
         return model 
 
     def save_model(self):
         self.model.save(self.path)
+        self.model.save_weights("weights.h5")
 
     def init_model(self):
         model = Sequential()
-        model.add(Dense(24, input_dim=self.state_size, activation='relu'))
-        model.add(Dense(24, activation='relu'))
+        model.add(Dense(12, input_dim=self.state_size, activation='relu'))
+        model.add(Dense(12, activation='relu'))
+        #model.add(Dense(32, activation='relu'))
+        #model.add(Dense(32, activation='relu'))
         model.add(Dense(self.action_size, activation='linear'))
         
         #Q_initializer = RandomUniform(minval=-1e-6, maxval=1e-6, seed=None)
