@@ -10,10 +10,10 @@ action_size = env.get_action_size()
 agent = Agent(
             state_size = state_size, 
             action_size = action_size, 
-            discount = 0.95, 
-            eps = 1.0, 
+            discount = 0.8, 
+            eps = 0.999, 
             eps_decay = 0.995, 
-            eps_min = 0.01, 
+            eps_min = 0.00001, 
             l_rate = 0.001
             )
 
