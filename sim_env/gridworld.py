@@ -176,23 +176,23 @@ class Env():
                 terminal = True
 
         else :
-            next_state = current_state
+            self.current_x = x
+            self.current_y = y
             reward = -100 * 100000
 
-        goal = self.is_goal()
+        #no hp loss in sim
+        hp = 100
 
-        next_state = [new_x, new_y, x_diff, y_diff, hp]
+
+        next_state = [x, y, x_diff, y_diff, hp]
 
         return next_state, reward, terminal
 
     def reset(self):
         return self.start_x, self.start_y
 
-    def distance(self, x, y):
-
-        avg_x, avg_y = self.avg 
-        
-        a = x - avg_x
-        b = y - avg_y
+    def distance(self, x, y):        
+        a = x - self.avg[0]
+        b = y - self.avg[1]
 
         return np.sqrt( a**2 + b**2 )
