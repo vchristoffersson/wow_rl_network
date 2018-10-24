@@ -7,18 +7,12 @@ lib = cdll.LoadLibrary('../libenvs.so')
 
 class Env(object):
     def __init__(self):
-        self.obj = lib.Env_new()
+        self.obj = lib.Envs_new()
     
-    def get_state_size(self):
-        return lib.GetStateSize(self.obj)
-
-    def get_action_size(self):
-        return lib.GetActionSize(self.obj)
-
     def reset(self):
 
-        lib.Reset.restype = POINTER(c_float * 5)
-        values = lib.Reset(self.obj).contents
+        lib.ResetSim.restype = POINTER(c_float * 5)
+        values = lib.ResetSim(self.obj).contents
 
         x = values[0]
         y = values[1]
@@ -31,10 +25,10 @@ class Env(object):
 
     def step(self, action):
 
-        lib.Step.argtypes = [c_int]
-        lib.Step.restype = POINTER(c_float * 7)
+        lib.StepSim.argtypes = [c_int]
+        lib.StepSim.restype = POINTER(c_float * 7)
 
-        values = lib.Step(self.obj, action).contents
+        values = lib.StepSim(self.obj, action).contents
 
         x = values[0]
         y = values[1]        

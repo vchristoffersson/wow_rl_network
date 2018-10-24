@@ -45,5 +45,5 @@ for ep in range(episodes):
             print("episode {} done, after {} steps, reward: {}, goal #{}".format(ep, step, reward, goalCounter))
             break
 
-    agent.replay(32)
+    agent.replay(64)
     agent.save_model()
