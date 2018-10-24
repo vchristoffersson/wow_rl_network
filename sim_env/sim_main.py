@@ -21,6 +21,7 @@ agent = Agent(
 episodes = 10000
 steps = 200
 goalCounter = 0
+
 for ep in range(episodes):
     state = env.reset()
 
@@ -31,7 +32,7 @@ for ep in range(episodes):
 
         next_state, reward, done = env.step(action)
         
-        #print("reward: {}, done: {}, step: {}".format(reward, done, step))
+        #print("reward: {}, done: {}, step: {}, action: {} ".format(reward, done, step, action))
 
         agent.remember(state, action, reward, next_state, done)
 
@@ -41,7 +42,7 @@ for ep in range(episodes):
             if reward > 1: 
                 goalCounter += 1
 
-            print("episode {} done, after {} steps, goal #{}".format(ep, step, goalCounter))
+            print("episode {} done, after {} steps, reward: {}, goal #{}".format(ep, step, reward, goalCounter))
             break
 
     agent.replay(32)

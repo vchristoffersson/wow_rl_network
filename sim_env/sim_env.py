@@ -3,7 +3,7 @@ from random import randint
 import numpy as np
 import time
 
-lib = cdll.LoadLibrary('../libenv.so')
+lib = cdll.LoadLibrary('../libenvs.so')
 
 class Env(object):
     def __init__(self):
@@ -26,7 +26,6 @@ class Env(object):
         y_diff = values[3]
         hp = values[4]
         state = np.reshape([x, y, x_diff, y_diff, hp], [1, 5])
-        time.sleep(0.2)
 
         return state
 
@@ -51,6 +50,7 @@ class Env(object):
 
 def test_env():
     env = Env()
+
     print("init state: {}".format(env.reset()))
 
     for _ in range(200):
@@ -58,11 +58,13 @@ def test_env():
 
         state, reward, done = env.step(action)
         
-        print("x: {}".format(state[0]))
-        print("y: {}".format(state[1]))
-        print("x diff to avg goal: {}".format(state[2]))
-        print("x diff to avg goal: {}".format(state[3]))
-        print("next state health: {}".format(state[4]))
+        print(state)
+
+        print("x: {}".format(state[0, 0]))
+        print("y: {}".format(state[0, 1]))
+        print("x diff to avg goal: {}".format(state[0, 2]))
+        print("x diff to avg goal: {}".format(state[0, 3]))
+        print("next state health: {}".format(state[0, 4]))
         print("reward: {}".format(reward))
         print("done: {}".format(done))
 
