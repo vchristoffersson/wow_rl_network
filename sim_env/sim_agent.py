@@ -20,23 +20,10 @@ class Agent:
         self.eps_decay = eps_decay
         self.eps_min = eps_min
         self.l_rate = l_rate
-        self.model = self.load_model()
-
-    def load_model(self):
-        saved_file = Path(self.path)
-
-        model = self.init_model()
-
-        if saved_file.is_file():
-            model = load_model(self.path)
-            #model.compile(loss='mse', optimizer=Adam(lr=self.l_rate))
-            self.eps = self.eps_min
-
-        return model 
+        self.model = self.init_model()
 
     def save_model(self):
         self.model.save(self.path)
-        self.model.save_weights("weights.h5")
 
     def init_model(self):
         model = Sequential()
