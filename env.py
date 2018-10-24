@@ -9,49 +9,56 @@ class Env(object):
     def __init__(self):
         self.obj = lib.Env_new()
     
-    def get_state_size(self):
-        return lib.GetStateSize(self.obj)
-
-    def get_action_size(self):
-        return lib.GetActionSize(self.obj)
-
     def reset(self):
 
-        st = lib.Reset(self.obj)
-        state = np.reshape([st, 1.0], [1, 2])
-        time.sleep(0.2)
+        lib.Reset.restype = POINTER(c_float * 5)
+        values = lib.Reset(self.obj).contents
+
+        x = values[0]
+        y = values[1]
+        x_diff = values[2]
+        y_diff = values[3]
+        hp = values[4]
+        state = np.reshape([x, y, x_diff, y_diff, hp], [1, 5])
 
         return state
 
     def step(self, action):
 
         lib.Step.argtypes = [c_int]
-        lib.Step.restype = POINTER(c_float * 5)
+        lib.Step.restype = POINTER(c_float * 7)
 
-         # values: 0 -> state_val, 1-> state_%health, 2-> distance to term, 3-> reward, 4-> is_done
         values = lib.Step(self.obj, action).contents
 
-        st = int(values[0])
-        hp = values[1]
-        dist = values[2]
-        next_state = np.reshape([st, hp, dist], [1, 3])
-        reward = values[3]
-        done_val = values[4]
+        x = values[0]
+        y = values[1]        
+        x_diff = values[2]
+        y_diff = values[3]        
+        hp = values[4]
+        state = np.reshape([x, y, x_diff, y_diff, hp], [1, 5])
+        reward = values[5]
+        done_val = values[6]
         done = True if done_val == 1 else False    
 
-        return next_state, reward, done
+        return state, reward, done
 
 def test_env():
     env = Env()
+
     print("init state: {}".format(env.reset()))
 
     for _ in range(200):
         action = randint(0, 3)
 
-        next_state, reward, done = env.step(action)
+        state, reward, done = env.step(action)
         
-        print("next state square: {}".format(next_state[0, 0]))
-        print("next state health: {}".format(next_state[0, 1]))
+        print(state)
+
+        print("x: {}".format(state[0, 0]))
+        print("y: {}".format(state[0, 1]))
+        print("x diff to avg goal: {}".format(state[0, 2]))
+        print("x diff to avg goal: {}".format(state[0, 3]))
+        print("next state health: {}".format(state[0, 4]))
         print("reward: {}".format(reward))
         print("done: {}".format(done))
 

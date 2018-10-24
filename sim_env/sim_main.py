@@ -10,16 +10,16 @@ action_size = 4
 agent = Agent(
             state_size = state_size, 
             action_size = action_size, 
-            discount = 0.8, 
+            discount = 0.9, 
             eps = 0.999, 
             eps_decay = 0.995, 
             eps_min = 0.00001, 
-            l_rate = 0.001
+            l_rate = 0.0001
             )
 
 #Train agent
-episodes = 10000
-steps = 200
+episodes = 100000
+steps = 100
 goalCounter = 0
 
 for ep in range(episodes):
