@@ -10,11 +10,11 @@ action_size = 4
 agent = Agent(
             state_size = state_size, 
             action_size = action_size, 
-            discount = 0.9, 
+            discount = 0.92, 
             eps = 1, 
-            eps_decay = 0.9999, 
-            eps_min = 0.01, 
-            l_rate = 0.00001
+            eps_decay = 0.999, 
+            eps_min = 0.001, 
+            l_rate = 0.0001
             )
 
 #Train agent
@@ -42,8 +42,12 @@ for ep in range(episodes):
             if reward > 1: 
                 goalCounter += 1
                 print("episode {} done, after {} steps, reward: {}, goal #{}".format(ep, step, reward, goalCounter))
+                agent.save_model()
             break
 
     agent.replay(64)
     
+    if goalCounter > 2000:
+        break
+
 agent.save_model()

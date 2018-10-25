@@ -27,10 +27,10 @@ class Agent:
 
     def init_model(self):
         model = Sequential()
-        model.add(Dense(128, activation='relu'))
-        model.add(Dense(128, activation='relu'))
+        model.add(Dense(64, input_dim=self.state_size, activation='relu'))
         model.add(Dense(64, activation='relu'))
-        model.add(Dense(64, activation='relu'))
+        model.add(Dense(32, activation='relu'))
+        model.add(Dense(32, activation='relu'))
         model.add(Dense(self.action_size, activation='linear'))
         #Q_initializer = RandomUniform(minval=-1e-6, maxval=1e-6, seed=None)
         #model.add(Dense(self.action_size, kernel_initializer=Q_initializer))

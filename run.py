@@ -30,5 +30,5 @@ def run() :
         print("reward: {}".format(reward))
 
         is_term = done
-
-run()
+while True:
+        run()
